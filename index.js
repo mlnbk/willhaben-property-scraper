@@ -36,17 +36,36 @@ const getListings = async (url) => {
 };
 
 const categories = Object.freeze({
-  'apartment rent': 'mietwohnungen/mietwohnung-angebote',
-  'apartment buy': 'eigentumswohnung/eigentumswohnung-angebote',
-  'house rent': 'haus-mieten/haus-angebote',
-  'house buy': 'haus-kaufen/haus-angebote',
+  'apartment rent': 'mietwohnungen',
+  'apartment buy': 'eigentumswohnung',
+  'house rent': 'haus-mieten',
+  'house buy': 'haus-kaufen',
+});
+
+const categoriesPostfix = Object.freeze({
+  mietwohnungen: 'mietwohnung-angebote',
+  eigentumswohnung: 'eigentumswohnung-angebote',
+  'haus-mieten': 'haus-angebote',
+  'haus-kaufen': 'haus-angebote',
+});
+
+const states = Object.freeze({
+  burgenland: 'burgenland',
+  carinthia: 'kaernten',
+  'lower austria': 'niederoesterreich',
+  'upper austria': 'oberoesterreich',
+  salzburg: 'salzburg',
+  styria: 'steiermark',
+  tyrol: 'tirol',
+  vorarlberg: 'vorarlberg',
+  vienna: 'wien',
 });
 
 class WillhabenPropertySearch {
   constructor() {
     this.searchCount = 1000;
     this.searchCategory = '';
-    this.searchContition = [];
+    this.federalState = '';
   }
 
   category(category) {
@@ -65,22 +84,25 @@ class WillhabenPropertySearch {
     return this;
   }
 
-  keyword(keyword) {
-    this.searchKeyword = keyword;
+  state(state) {
+    if (!Object.values(states).includes(state)) {
+      throw new Error('Invalid state! Use one of `WillhabenPropertySearch.states`.');
+    }
+    this.federalState = state;
     return this;
   }
 
   getURL() {
-    return `https://willhaben.at/iad/immobilien/${this.searchCategory}?rows=${this.searchCount}`
-        + `${this.searchKeyword ? `&keyword=${this.searchKeyword.split(' ').join('+')}` : ''}`;
+    return `https://willhaben.at/iad/immobilien/${this.searchCategory}/`
+        + `${this.federalState ? `${this.federalState}` : `${categoriesPostfix[this.searchCategory]}`}`;
   }
 
   async search() {
     const listings = [];
-    const numOfPages = Math.ceil(this.searchCount / 200);
+    const numOfPages = Math.ceil(this.searchCount / 10);
 
     for (let i = 0; i < numOfPages; i++) {
-      const url = `${this.getURL()}&page=${i + 1}`;
+      const url = `${this.getURL()}${this.federalState ? '?' : '?&'}page=${i + 1}`;
       const pageListings = await getListings(url);
       listings.push(...pageListings);
 
@@ -95,3 +117,4 @@ class WillhabenPropertySearch {
 
 module.exports = WillhabenPropertySearch;
 module.exports.categories = categories;
+module.exports.states = states;
