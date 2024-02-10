@@ -75,8 +75,21 @@ class WillhabenPropertySearch {
         + `${this.searchKeyword ? `&keyword=${this.searchKeyword.split(' ').join('+')}` : ''}`;
   }
 
-  search() {
-    return getListings(this.getURL());
+  async search() {
+    const listings = [];
+    const numOfPages = Math.ceil(this.searchCount / 200);
+
+    for (let i = 0; i < numOfPages; i++) {
+      const url = `${this.getURL()}&page=${i + 1}`;
+      const pageListings = await getListings(url);
+      listings.push(...pageListings);
+
+      if (listings.length >= this.searchCount) {
+        break;
+      }
+    }
+
+    return listings.slice(0, this.searchCount);
   }
 }
 

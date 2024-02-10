@@ -11,5 +11,8 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'no-restricted-syntax': 'off',
+    'no-await-in-loop': 'off',
+    'no-plusplus': 'off',
   },
 };
