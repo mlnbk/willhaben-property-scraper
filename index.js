@@ -50,22 +50,156 @@ const categoriesPostfix = Object.freeze({
 });
 
 const states = Object.freeze({
-  burgenland: 'burgenland',
-  carinthia: 'kaernten',
-  'lower austria': 'niederoesterreich',
-  'upper austria': 'oberoesterreich',
-  salzburg: 'salzburg',
-  styria: 'steiermark',
-  tyrol: 'tirol',
-  vorarlberg: 'vorarlberg',
-  vienna: 'wien',
+  burgenland: {
+    name: 'burgenland',
+    districts: {
+      eisenstadt: 'eisenstadt',
+      'eisenstadt-umgebung': 'eisenstadt-umgebung',
+      güssing: 'güssing',
+      jennersdorf: 'jennersdorf',
+      mattersburg: 'mattersburg',
+      'neusiedl-am-see': 'neusiedl-am-see',
+      oberpullendorf: 'oberpullendorf',
+      oberwart: 'oberwart',
+      'rust-stadt': 'rust-stadt-',
+    },
+  },
+  carinthia: {
+    name: 'kaernten',
+    districts: {
+      feldkirchen: 'feldkirchen',
+      hermagor: 'hermagor',
+      'klagenfurt-land': 'klagenfurt-land',
+      'klagenfurt': 'klagenfurt',
+      'st-veit-an-der-glan': 'st-veit-an-der-glan',
+      'spittal-an-der-drau': 'spittal-an-der-drau',
+      'villach-land': 'villach-land',
+      'villach': 'villach',
+      voelkermarkt: 'voelkermarkt',
+      wolfsberg: 'wolfsberg',
+    },
+
+  },
+  'lower austria': {
+    name: 'niederoesterreich',
+    districts: {
+      amstetten: 'amstetten',
+      baden: 'baden',
+      'bruck-an-der-leitha': 'bruck-an-der-leitha',
+      gaenserndorf: 'gaenserndorf',
+      gmuend: 'gmuend',
+      hollabrunn: 'hollabrunn',
+      horn: 'horn',
+      korneuburg: 'korneuburg',
+      'krems-land': 'krems-land',
+      'krems-stadt': 'krems-stadt',
+      lilienfeld: 'lilienfeld',
+      melk: 'melk',
+      mistelbach: 'mistelbach',
+      moedling: 'moedling',
+      neunkirchen: 'neunkirchen',
+      scheibbs: 'scheibbs',
+      'st-poelten-land': 'st-poelten-land',
+      'st-poelten-stadt': 'st-poelten-stadt',
+      tulln: 'tulln',
+      'waidhofen-an-der-thaya': 'waidhofen-an-der-thaya',
+      'waidhofen-an-der-ybbs': 'waidhofen-an-der-ybbs',
+      weinviertel: 'weinviertel',
+      'wiener-neustadt-land': 'wiener-neustadt-land',
+      'wiener-neustadt-stadt': 'wiener-neustadt-stadt',
+      zwettl: 'zwettl',
+    },
+  },
+  'upper austria': {
+    name: 'oberoesterreich',
+    districts: {
+      braunau: 'braunau',
+      eferding: 'eferding',
+      freistadt: 'freistadt',
+      grieskirchen: 'grieskirchen',
+      kirchdorf: 'kirchdorf',
+      linz: 'linz',
+      'linz-land': 'linz-land',
+      perg: 'perg',
+      ried: 'ried',
+      rohrbach: 'rohrbach',
+      schärding: 'schärding',
+      steyr: 'steyr',
+      'steyr-land': 'steyr-land',
+      urfahr: 'urfahr',
+      'urfahr-umgebung': 'urfahr-umgebung',
+      vöcklabruck: 'vöcklabruck',
+      wels: 'wels',
+      'wels-land': 'wels-land',
+    },
+  },
+  salzburg: {
+    name: 'salzburg',
+    districts: {
+      hallein: 'hallein',
+      salzburg: 'salzburg',
+      'salzburg-umgebung': 'salzburg-umgebung',
+      'st-johann': 'st-johann',
+      tamsweg: 'tamsweg',
+      'zell-am-see': 'zell-am-see',
+    },
+  },
+  styria: {
+    name: 'steiermark',
+    districts: {
+      'bruck-an-der-mur': 'bruck-an-der-mur',
+      deutschlandsberg: 'deutschlandsberg',
+      feldbach: 'feldbach',
+      furstenfeld: 'furstenfeld',
+      graz: 'graz',
+      'graz-umgebung': 'graz-umgebung',
+      'hartberg-fuerstenfeld': 'hartberg-fuerstenfeld',
+      leibnitz: 'leibnitz',
+      leoben: 'leoben',
+      liezen: 'liezen',
+      murau: 'murau',
+      murtal: 'murtal',
+      südoststeiermark: 'südoststeiermark',
+      voitsberg: 'voitsberg',
+      weiz: 'weiz',
+
+    },
+  },
+  tyrol: {
+    name: 'tirol',
+    districts: {
+      imst: 'imst',
+      innsbruck: 'innsbruck',
+      'innsbruck-land': 'innsbruck-land',
+      kitzbühel: 'kitzbühel',
+      kufstein: 'kufstein',
+      landeck: 'landeck',
+      lienz: 'lienz',
+      reutte: 'reutte',
+      schwaz: 'schwaz',
+    },
+  },
+  vorarlberg: {
+    name: 'vorarlberg',
+    districts: {
+      bludenz: 'bludenz',
+      bregenz: 'bregenz',
+      dornbirn: 'dornbirn',
+      feldkirch: 'feldkirch',
+    },
+  },
+  vienna: {
+    name: 'wien',
+    districts: [],
+  },
 });
 
 class WillhabenPropertySearch {
   constructor() {
     this.searchCount = 1000;
     this.searchCategory = '';
-    this.federalState = '';
+    this.searchState = null;
+    this.searchDistrict = '';
   }
 
   category(category) {
@@ -88,13 +222,38 @@ class WillhabenPropertySearch {
     if (!Object.values(states).includes(state)) {
       throw new Error('Invalid state! Use one of `WillhabenPropertySearch.states`.');
     }
-    this.federalState = state;
+    this.searchState = state;
+    return this;
+  }
+
+  district(district) {
+    if (!this.searchState) {
+      throw new Error('You have to set the state first!');
+    }
+    if (!Object.values(this.searchState.districts).includes(district)) {
+      throw new Error(`Invalid district for ${this.searchState}!`);
+    }
+    this.searchDistrict = district;
     return this;
   }
 
   getURL() {
-    return `https://willhaben.at/iad/immobilien/${this.searchCategory}/`
-        + `${this.federalState ? `${this.federalState}` : `${categoriesPostfix[this.searchCategory]}`}`;
+    let url = 'https://willhaben.at/iad/immobilien/';
+
+    if (this.searchCategory) {
+      url += `${this.searchCategory}/`;
+      if (this.searchState) {
+        if (this.searchDistrict) {
+          url += `${this.searchState.name}/${this.searchDistrict}`;
+        } else {
+          url += this.searchState;
+        }
+      } else {
+        url += categoriesPostfix[this.searchCategory];
+      }
+    }
+
+    return url;
   }
 
   async search() {
@@ -102,7 +261,7 @@ class WillhabenPropertySearch {
     const numOfPages = Math.ceil(this.searchCount / 10);
 
     for (let i = 0; i < numOfPages; i++) {
-      const url = `${this.getURL()}${this.federalState ? '?' : '?&'}page=${i + 1}`;
+      const url = `${this.getURL()}${this.searchState ? '?' : '?&'}page=${i + 1}`;
       const pageListings = await getListings(url);
       listings.push(...pageListings);
 
