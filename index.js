@@ -27,6 +27,10 @@ const getListings = async (url) => {
       }
     });
 
+    if (modifiedObj.price && Number.isNaN(Number(modifiedObj.price))) {
+      return;
+    }
+
     returnArray.push(modifiedObj);
   });
 
