@@ -10,7 +10,7 @@ const getListings = async (url) => {
     returnObj.attributes.attribute.forEach((element) => {
       const propertyName = element.name.toLowerCase();
       if (
-        propertyName === 'AD_UUID'
+        propertyName === 'ad_uuid'
             || propertyName === 'postcode'
             || propertyName === 'number_of_rooms'
             || propertyName === 'price'
@@ -21,9 +21,9 @@ const getListings = async (url) => {
             || propertyName === 'estate_size/useable_area'
             || propertyName === 'estate_size/living_area'
       ) {
-        modifiedObj[propertyName] = Number.isNaN(element.values[0])
+        modifiedObj[propertyName] = Number.isNaN(Number(element.values[0])) || propertyName === 'free_area_type'
           ? element.values[0]
-          : +element.values[0];
+          : Number(element.values[0]);
       }
     });
 
