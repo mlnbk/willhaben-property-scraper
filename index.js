@@ -10,15 +10,13 @@ const getListings = async (url) => {
     returnObj.attributes.attribute.forEach((element) => {
       const propertyName = element.name.toLowerCase();
       if (
-        propertyName === 'postcode'
+        propertyName === 'AD_UUID'
+            || propertyName === 'postcode'
             || propertyName === 'number_of_rooms'
             || propertyName === 'price'
             || propertyName === 'estate_size'
             || propertyName === 'location_quality'
-            || propertyName === 'is_bumped'
             || propertyName === 'floor'
-            || propertyName === 'isprivate'
-            || propertyName === 'number_of_children'
             || propertyName === 'free_area_type'
             || propertyName === 'estate_size/useable_area'
             || propertyName === 'estate_size/living_area'
