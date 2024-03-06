@@ -15,8 +15,8 @@ const getListings = async (url) => {
         propertyName === 'ad_uuid' ||
         propertyName === 'country' ||
         propertyName === 'postcode' ||
-        propertyName === 'district' ||
         propertyName === 'state' ||
+        propertyName === 'district' ||
         propertyName === 'location' ||
         propertyName === 'number_of_rooms' ||
         propertyName === 'price' ||
@@ -32,7 +32,15 @@ const getListings = async (url) => {
       }
     });
 
-    if (!modifiedObj.price || (modifiedObj.price && Number.isNaN(Number(modifiedObj.price))) || !modifiedObj.ad_uuid || modifiedObj.country !== 'Österreich') {
+    if (
+      !modifiedObj.price ||
+      (modifiedObj.price && Number.isNaN(Number(modifiedObj.price))) ||
+      !modifiedObj.ad_uuid ||
+      !modifiedObj.country ||
+      modifiedObj.country !== 'Österreich' ||
+      !modifiedObj.state ||
+      !modifiedObj.district
+    ) {
       return;
     }
 
