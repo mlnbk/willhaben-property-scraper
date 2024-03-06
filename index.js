@@ -12,6 +12,9 @@ const getListings = async (url) => {
       if (
         propertyName === 'ad_uuid'
             || propertyName === 'postcode'
+            || propertyName === 'district'
+            || propertyName === 'state'
+            || propertyName === 'location'
             || propertyName === 'number_of_rooms'
             || propertyName === 'price'
             || propertyName === 'estate_size'
@@ -248,10 +251,12 @@ class WillhabenPropertySearch {
         if (this.searchDistrict) {
           url += `${this.searchState.name}/${this.searchDistrict}`;
         } else {
-          url += this.searchState;
+          url += this.searchState.name;
         }
+        url += '?';
       } else {
         url += categoriesPostfix[this.searchCategory];
+        url += '?&';
       }
     }
 
@@ -263,7 +268,7 @@ class WillhabenPropertySearch {
     const numOfPages = Math.ceil(this.searchCount / 10);
 
     for (let i = 0; i < numOfPages; i++) {
-      const url = `${this.getURL()}${this.searchState ? '?' : '?&'}page=${i + 1}`;
+      const url = `${this.getURL()}page=${i + 1}`;
       const pageListings = await getListings(url);
       listings.push(...pageListings);
 
