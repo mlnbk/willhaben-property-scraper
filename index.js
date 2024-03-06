@@ -1,7 +1,9 @@
 const getListings = async (url) => {
   const response = await fetch(url);
   const string = await response.text();
-  const temp = string.substring(string.indexOf('<script id="__NEXT_DATA__" type="application/json">') + '<script id="__NEXT_DATA__" type="application/json">'.length);
+  const temp = string.substring(
+    string.indexOf('<script id="__NEXT_DATA__" type="application/json">') + '<script id="__NEXT_DATA__" type="application/json">'.length,
+  );
   const result = JSON.parse(temp.substring(0, temp.indexOf('</script>')));
   const returnArray = [];
 
@@ -10,28 +12,27 @@ const getListings = async (url) => {
     returnObj.attributes.attribute.forEach((element) => {
       const propertyName = element.name.toLowerCase();
       if (
-        propertyName === 'ad_uuid'
-            || propertyName === 'country'
-            || propertyName === 'postcode'
-            || propertyName === 'district'
-            || propertyName === 'state'
-            || propertyName === 'location'
-            || propertyName === 'number_of_rooms'
-            || propertyName === 'price'
-            || propertyName === 'estate_size'
-            || propertyName === 'location_quality'
-            || propertyName === 'floor'
-            || propertyName === 'free_area_type'
-            || propertyName === 'estate_size/useable_area'
-            || propertyName === 'estate_size/living_area'
+        propertyName === 'ad_uuid' ||
+        propertyName === 'country' ||
+        propertyName === 'postcode' ||
+        propertyName === 'district' ||
+        propertyName === 'state' ||
+        propertyName === 'location' ||
+        propertyName === 'number_of_rooms' ||
+        propertyName === 'price' ||
+        propertyName === 'estate_size' ||
+        propertyName === 'location_quality' ||
+        propertyName === 'floor' ||
+        propertyName === 'free_area_type' ||
+        propertyName === 'estate_size/useable_area' ||
+        propertyName === 'estate_size/living_area'
       ) {
-        modifiedObj[propertyName] = Number.isNaN(Number(element.values[0])) || propertyName === 'free_area_type'
-          ? element.values[0]
-          : Number(element.values[0]);
+        modifiedObj[propertyName] =
+          Number.isNaN(Number(element.values[0])) || propertyName === 'free_area_type' ? element.values[0] : Number(element.values[0]);
       }
     });
 
-    if ((modifiedObj.price && Number.isNaN(Number(modifiedObj.price))) || modifiedObj.country !== 'Österreich') {
+    if (!modifiedObj.price || (modifiedObj.price && Number.isNaN(Number(modifiedObj.price))) || !modifiedObj.ad_uuid || modifiedObj.country !== 'Österreich') {
       return;
     }
 
@@ -84,7 +85,6 @@ const states = Object.freeze({
       voelkermarkt: 'voelkermarkt',
       wolfsberg: 'wolfsberg',
     },
-
   },
   'lower austria': {
     name: 'niederoesterreich',
@@ -168,7 +168,6 @@ const states = Object.freeze({
       südoststeiermark: 'südoststeiermark',
       voitsberg: 'voitsberg',
       weiz: 'weiz',
-
     },
   },
   tyrol: {
