@@ -11,6 +11,7 @@ const getListings = async (url) => {
       const propertyName = element.name.toLowerCase();
       if (
         propertyName === 'ad_uuid'
+            || propertyName === 'country'
             || propertyName === 'postcode'
             || propertyName === 'district'
             || propertyName === 'state'
@@ -30,7 +31,7 @@ const getListings = async (url) => {
       }
     });
 
-    if (modifiedObj.price && Number.isNaN(Number(modifiedObj.price))) {
+    if ((modifiedObj.price && Number.isNaN(Number(modifiedObj.price))) || modifiedObj.country !== 'Österreich') {
       return;
     }
 
